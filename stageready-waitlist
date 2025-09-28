@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StageReady – Join the Waitlist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #141E30, #243B55);
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* Elegant animated background blur */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+      top: -150px;
+      left: -150px;
+      filter: blur(120px);
+      animation: float 8s infinite alternate ease-in-out;
+    }
+    body::after {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,183,77,0.25), transparent 70%);
+      bottom: -100px;
+      right: -150px;
+      filter: blur(100px);
+      animation: float 10s infinite alternate-reverse ease-in-out;
+    }
+    @keyframes float {
+      from { transform: translateY(0px); }
+      to { transform: translateY(40px); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255,255,255,0.05);
+      padding: 60px 40px;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #ffb347, #ffcc33);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      font-size: 1.1rem;
+      margin-bottom: 35px;
+      color: #ddd;
+      font-weight: 300;
+    }
+
+    input[type="email"] {
+      width: 80%;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      margin-bottom: 20px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    input[type="email"]::placeholder {
+      color: #bbb;
+    }
+    input[type="email"]:focus {
+      border-color: #ffb347;
+      background: rgba(255,255,255,0.15);
+    }
+
+    button {
+      padding: 16px 40px;
+      background: linear-gradient(90deg, #ff9800, #ffb347);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255,152,0,0.4);
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255,152,0,0.5);
+    }
+
+    .success {
+      margin-top: 25px;
+      font-weight: 600;
+      color: #4caf50;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>StageReady</h1>
+    <p class="subtitle">Own the spotlight. No nerves, only confidence. Join our waitlist today.</p>
+    <form id="waitlistForm">
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <br>
+      <button type="submit">Join the Waitlist</button>
+    </form>
+    <p id="message" class="success"></p>
+    <footer>© 2025 StageReady. All rights reserved.</footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("waitlistForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const url = "https://script.google.com/macros/s/AKfycbx6yjqSrbd6zzPiSAQy5iG304w1h4ogljdTeZtNl9iasZ7rYKBdC9naGDBG_icJj2e2/exec";
+
+      try {
+        await fetch(url, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `email=${encodeURIComponent(email)}`
+        });
+
+        message.textContent = "✅ Thanks for joining StageReady!";
+        form.reset();
+
+      } catch (err) {
+        console.error(err);
+        message.textContent = "⚠️ Oops! Something went wrong.";
+      }
+    });
+  </script>
+</body>
+</html>
