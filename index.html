@@ -1,166 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StageReady – Join the Waitlist</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #141E30, #243B55);
-      overflow: hidden;
-      color: #fff;
+    * { box-sizing: border-box; }
+    :root {
+      --bg1: #141e30;
+      --bg2: #243b55;
+      --glass: rgba(255,255,255,0.06);
+      --stroke: rgba(255,255,255,0.14);
+      --text: #eef2f6;
+      --muted: #cfd7e3;
+      --brand1: #ffb347;
+      --brand2: #ff9800;
+      --ok: #37d67a;
+      --warn: #ff4d4f;
     }
-
-    /* Elegant animated background blur */
-    body::before {
-      content: "";
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
-      top: -150px;
-      left: -150px;
-      filter: blur(120px);
-      animation: float 8s infinite alternate ease-in-out;
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
     }
-    body::after {
-      content: "";
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(255,183,77,0.25), transparent 70%);
-      bottom: -100px;
-      right: -150px;
-      filter: blur(100px);
-      animation: float 10s infinite alternate-reverse ease-in-out;
-    }
-    @keyframes float {
-      from { transform: translateY(0px); }
-      to { transform: translateY(40px); }
-    }
-
-    .container {
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
       position: relative;
-      z-index: 2;
-      background: rgba(255,255,255,0.05);
-      padding: 60px 40px;
-      border-radius: 24px;
-      text-align: center;
-      max-width: 500px;
+      overflow: hidden;
+    }
+    /* soft blobs */
+    .wrap::before, .wrap::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: .7;
+      z-index: 0;
+    }
+    .wrap::before {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(255,255,255,.16), transparent 70%);
+      top: -120px; left: -140px;
+      animation: float 8s ease-in-out infinite alternate;
+    }
+    .wrap::after {
+      width: 460px; height: 460px;
+      background: radial-gradient(circle, rgba(255,183,77,.26), transparent 70%);
+      right: -140px; bottom: -100px;
+      animation: float 10s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes float { from { transform: translateY(0); } to { transform: translateY(36px); } }
+
+    .card {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.15);
+      max-width: 820px;
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      border-radius: 24px;
+      box-shadow: 0 22px 60px rgba(0,0,0,.55);
+      backdrop-filter: blur(16px);
+      padding: 28px;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      background: linear-gradient(90deg, #ffb347, #ffcc33);
+    .pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      margin: 6px 0 8px;
+      font-size: clamp(26px, 4.8vw, 40px);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(90deg, var(--brand1), #ffe08a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    p.subtitle {
-      font-size: 1.1rem;
-      margin-bottom: 35px;
-      color: #ddd;
-      font-weight: 300;
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
     }
 
-    input[type="email"] {
-      width: 80%;
-      padding: 16px;
+    .grid {
+      display: grid;
+      gap: 22px;
+      margin-top: 24px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 880px) {
+      .grid { grid-template-columns: 1.2fr .8fr; }
+    }
+
+    .section {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .section h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .section p, .bullets li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .bullets {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    label { font-size: 13px; color: var(--muted); }
+    input, textarea, select, button {
+      width: 100%;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.25);
-      margin-bottom: 20px;
-      font-size: 1rem;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      padding: 14px 14px;
+      font-size: 15px;
       outline: none;
-      transition: all 0.3s ease;
+      transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
     }
-    input[type="email"]::placeholder {
-      color: #bbb;
-    }
-    input[type="email"]:focus {
-      border-color: #ffb347;
-      background: rgba(255,255,255,0.15);
-    }
+    textarea { min-height: 96px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: #aeb7c4; }
 
-    button {
-      padding: 16px 40px;
-      background: linear-gradient(90deg, #ff9800, #ffb347);
-      color: #fff;
+    input:focus, textarea:focus { border-color: var(--brand1); background: rgba(255,255,255,.12); }
+
+    .cta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .btn {
+      width: auto;
+      background: linear-gradient(90deg, var(--brand2), var(--brand1));
+      color: #1b1b1b;
+      font-weight: 800;
+      letter-spacing: .2px;
       border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 5px 15px rgba(255,152,0,0.4);
+      box-shadow: 0 8px 28px rgba(255,152,0,.45);
     }
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(255,152,0,0.5);
-    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(255,152,0,.55); }
 
-    .success {
-      margin-top: 25px;
+    .note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+    .success { color: var(--ok); font-weight: 700; margin-top: 8px; }
+    .error { color: var(--warn); font-weight: 700; margin-top: 8px; }
+
+    .deadline {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(255,183,77,.14);
+      border: 1px solid rgba(255,183,77,.35);
+      color: #fff3d6;
+      border-radius: 10px;
+      font-size: 13px;
       font-weight: 600;
-      color: #4caf50;
     }
 
     footer {
-      margin-top: 30px;
-      font-size: 0.8rem;
-      color: #aaa;
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>StageReady</h1>
-    <p class="subtitle">Own the spotlight. No nerves, only confidence. Join our waitlist today.</p>
-    <form id="waitlistForm">
-      <input type="email" id="email" placeholder="Enter your email" required>
-      <br>
-      <button type="submit">Join the Waitlist</button>
-    </form>
-    <p id="message" class="success"></p>
-    <footer>© 2025 StageReady. All rights reserved.</footer>
-  </div>
+  <main class="wrap">
+    <div class="card">
+      <span class="pill">Focus on connection. Not perfection.</span>
+      <header>
+        <h1>Speak with confidence. Be heard. Be remembered.</h1>
+        <p>Join the StageReady waitlist and start building real speaking confidence with simple practice that fits your life.</p>
+        <div class="deadline">Sign up before October 2 to get lifetime access</div>
+      </header>
+
+      <section class="grid">
+        <!-- Left: copy blocks -->
+        <div class="stack">
+          <div class="section">
+            <h3>Who it is for</h3>
+            <ul class="bullets">
+              <li>Students who want to speak up in class without fear.</li>
+              <li>Professionals who want to present with clarity and calm.</li>
+              <li>Founders and creators who want to tell a story that sticks.</li>
+              <li>Anyone who wants connection to feel easier and more natural.</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h3>What StageReady helps you do</h3>
+            <ul class="bullets">
+              <li>Practice short daily reps with prompts that remove the guesswork.</li>
+              <li>Get instant guidance on pace, clarity, and filler words.</li>
+              <li>Collect simple feedback from a supportive circle or mentors.</li>
+              <li>Track progress so you see real change over time.</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h3>Why StageReady</h3>
+            <p>We are not chasing perfect speeches. We are building real connection. You will learn to sound like yourself, only clearer and calmer. One small step at a time.</p>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="section">
+          <h3>Join the waitlist</h3>
+          <p class="note">Only 2 minutes. We read every response.</p>
+          <form id="waitlistForm">
+            <div>
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" placeholder="Your name" required />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label for="goal">What is the biggest speaking challenge you would love to overcome?</label>
+              <textarea id="goal" name="goal" placeholder="Example: I freeze during Q and A, I speak too fast, I avoid eye contact" required></textarea>
+            </div>
+
+            <div class="cta">
+              <button class="btn" type="submit">Get early access</button>
+              <span class="note">You will also receive simple practice tips by email.</span>
+            </div>
+
+            <p id="msg" class="" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <footer>© 2025 StageReady</footer>
+    </div>
+  </main>
 
   <script>
     const form = document.getElementById("waitlistForm");
-    const message = document.getElementById("message");
+    const msg  = document.getElementById("msg");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
+      msg.className = "";
+      msg.textContent = "";
+
+      const name  = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const goal  = document.getElementById("goal").value.trim();
+
+      if (!name || !email || !goal) {
+        msg.className = "error";
+        msg.textContent = "Please complete all fields.";
+        return;
+      }
+
+      // Replace with your own Google Apps Script endpoint if needed
       const url = "https://script.google.com/macros/s/AKfycbx6yjqSrbd6zzPiSAQy5iG304w1h4ogljdTeZtNl9iasZ7rYKBdC9naGDBG_icJj2e2/exec";
+
+      const body = new URLSearchParams({ name, email, goal });
 
       try {
         await fetch(url, {
           method: "POST",
           mode: "no-cors",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `email=${encodeURIComponent(email)}`
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: body.toString()
         });
 
-        message.textContent = "✅ Thanks for joining StageReady!";
+        msg.className = "success";
+        msg.textContent = "Thank you. You are on the list.";
         form.reset();
-
       } catch (err) {
         console.error(err);
-        message.textContent = "⚠️ Oops! Something went wrong.";
+        msg.className = "error";
+        msg.textContent = "Something went wrong. Please try again.";
       }
     });
   </script>
