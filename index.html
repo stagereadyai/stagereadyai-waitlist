@@ -203,7 +203,7 @@
       <header>
         <h1>Speak with confidence. Be heard. Be remembered.</h1>
         <p>Join the StageReady waitlist and start building real speaking confidence with simple practice that fits your life.</p>
-        <div class="deadline">Sign up before October 2 to get lifetime access to all premium features</div>
+        <div class="deadline">Sign up before October 2 to get lifetime access</div>
       </header>
 
       <section class="grid">
@@ -291,21 +291,21 @@
 
       const body = new URLSearchParams({ name, email, goal });
 
+      // Show success immediately for better UX
+      msg.className = "success";
+      msg.textContent = "Thank you. You are on the list.";
+      form.reset();
+
+      // Send data in background
       try {
-        await fetch(url, {
+        fetch(url, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
           body: body.toString()
         });
-
-        msg.className = "success";
-        msg.textContent = "Thank you. You are on the list.";
-        form.reset();
       } catch (err) {
         console.error(err);
-        msg.className = "error";
-        msg.textContent = "Something went wrong. Please try again.";
       }
     });
   </script>
