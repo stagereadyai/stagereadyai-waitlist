@@ -287,7 +287,7 @@
       }
 
       // Replace with your own Google Apps Script endpoint if needed
-      const url = "https://script.google.com/macros/s/AKfycbw2aTUTy7p4ZYzn1zevysK-WeJ5hdXudQkzmG7fw_6J0AiskvYVp8UujyNp7SEmbpMf/exec";
+      const url = "https://script.google.com/macros/s/AKfycbwd3Jky6qYwHriqVtpFj-vE_x0mG6C7Si-N8pW24sK56bSOVJcELL2EBuJnWaIpftxQ/exec";
 
       const body = new URLSearchParams({ name, email, goal });
 
@@ -299,11 +299,10 @@
       // Send data in background
       try {
         fetch(url, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-          body: body.toString()
-        });
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: body.toString()
+});
       } catch (err) {
         console.error(err);
       }
