@@ -33,7 +33,6 @@
       position: relative;
       overflow: hidden;
     }
-    /* soft blobs */
     .wrap::before, .wrap::after {
       content: "";
       position: absolute;
@@ -168,6 +167,7 @@
       box-shadow: 0 8px 28px rgba(255,152,0,.45);
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(255,152,0,.55); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .note {
       font-size: 13px;
@@ -176,6 +176,7 @@
     }
     .success { color: var(--ok); font-weight: 700; margin-top: 8px; }
     .error { color: var(--warn); font-weight: 700; margin-top: 8px; }
+    .loading { color: var(--brand1); font-weight: 600; margin-top: 8px; }
 
     .deadline {
       display: inline-block;
@@ -207,7 +208,6 @@
       </header>
 
       <section class="grid">
-        <!-- Left: copy blocks -->
         <div class="stack">
           <div class="section">
             <h3>Who it is for</h3>
@@ -235,7 +235,6 @@
           </div>
         </div>
 
-        <!-- Right: form -->
         <div class="section">
           <h3>Join the waitlist</h3>
           <p class="note">Only 30 seconds. We read every response.</p>
@@ -258,7 +257,7 @@
             </div>
 
             <div class="cta">
-              <button class="btn" type="submit">Get early access</button>
+              <button class="btn" type="submit" id="submitBtn">Get early access</button>
             </div>
 
             <p id="msg" class="" role="status" aria-live="polite"></p>
@@ -272,16 +271,19 @@
 
   <script>
     const form = document.getElementById("waitlistForm");
-    const msg  = document.getElementById("msg");
+    const msg = document.getElementById("msg");
+    const submitBtn = document.getElementById("submitBtn");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      
+      // Clear previous messages
       msg.className = "";
       msg.textContent = "";
 
-      const name  = document.getElementById("name").value.trim();
+      const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
-      const goal  = document.getElementById("goal").value.trim();
+      const goal = document.getElementById("goal").value.trim();
       const referral = document.getElementById("referral").value.trim();
 
       if (!name || !email) {
@@ -290,26 +292,40 @@
         return;
       }
 
-      // Replace with your own Google Apps Script endpoint if needed
-      const url = "https://script.google.com/macros/s/AKfycbx6yjqSrbd6zzPiSAQy5iG304w1h4ogljdTeZtNl9iasZ7rYKBdC9naGDBG_icJj2e2/exec";
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      msg.className = "loading";
+      msg.textContent = "Submitting...";
+
+      // Replace with your deployed Google Apps Script URL
+      const url = "https://script.google.com/macros/s/AKfycbxwETh9aweCSE88TvuL5zzn1z0AYP4qlDiyCbubjYearOVqK8J4QhOsgZkmf99TPNE/exec";
 
       const body = new URLSearchParams({ name, email, goal, referral });
 
-      // Show success immediately for better UX
-      msg.className = "success";
-      msg.textContent = "Thank you. You are on the list.";
-      form.reset();
-
-      // Send data in background
       try {
-        fetch(url, {
+        const response = await fetch(url, {
           method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          headers: { 
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
           body: body.toString()
         });
+
+        const result = await response.json();
+        
+        if (result.status === "success") {
+          msg.className = "success";
+          msg.textContent = "Thank you! You are on the list.";
+          form.reset();
+        } else {
+          throw new Error(result.message || "Submission failed");
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Submission error:", err);
+        msg.className = "error";
+        msg.textContent = "Something went wrong. Please try again or contact support.";
+      } finally {
+        submitBtn.disabled = false;
       }
     });
   </script>
