@@ -33,6 +33,7 @@
       position: relative;
       overflow: hidden;
     }
+    /* soft blobs */
     .wrap::before, .wrap::after {
       content: "";
       position: absolute;
@@ -167,7 +168,6 @@
       box-shadow: 0 8px 28px rgba(255,152,0,.45);
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(255,152,0,.55); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .note {
       font-size: 13px;
@@ -176,7 +176,6 @@
     }
     .success { color: var(--ok); font-weight: 700; margin-top: 8px; }
     .error { color: var(--warn); font-weight: 700; margin-top: 8px; }
-    .loading { color: var(--brand1); font-weight: 600; margin-top: 8px; }
 
     .deadline {
       display: inline-block;
@@ -204,13 +203,14 @@
       <header>
         <h1>Speak with confidence. Be heard. Be remembered.</h1>
         <p>Join the StageReady waitlist and start building real speaking confidence with simple practice that fits your life.</p>
-        <div class="deadline">Refer TWO friends to get lifetime access</div>
+        <div class="deadline">Sign up before October 3rd to get lifetime access</div>
       </header>
 
       <section class="grid">
+        <!-- Left: copy blocks -->
         <div class="stack">
           <div class="section">
-            <h3>Who is it for</h3>
+            <h3>Who it is for</h3>
             <ul class="bullets">
               <li>Students who want to speak up in class without fear.</li>
               <li>Professionals who want to present with clarity and calm.</li>
@@ -235,6 +235,7 @@
           </div>
         </div>
 
+        <!-- Right: form -->
         <div class="section">
           <h3>Join the waitlist</h3>
           <p class="note">Only 30 seconds. We read every response.</p>
@@ -257,7 +258,7 @@
             </div>
 
             <div class="cta">
-              <button class="btn" type="submit" id="submitBtn">Get early access</button>
+              <button class="btn" type="submit">Get early access</button>
             </div>
 
             <p id="msg" class="" role="status" aria-live="polite"></p>
@@ -271,19 +272,16 @@
 
   <script>
     const form = document.getElementById("waitlistForm");
-    const msg = document.getElementById("msg");
-    const submitBtn = document.getElementById("submitBtn");
+    const msg  = document.getElementById("msg");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
-      // Clear previous messages
       msg.className = "";
       msg.textContent = "";
 
-      const name = document.getElementById("name").value.trim();
+      const name  = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
-      const goal = document.getElementById("goal").value.trim();
+      const goal  = document.getElementById("goal").value.trim();
       const referral = document.getElementById("referral").value.trim();
 
       if (!name || !email) {
@@ -292,47 +290,26 @@
         return;
       }
 
-      // Disable button and show loading
-      submitBtn.disabled = true;
-      msg.className = "loading";
-      msg.textContent = "Submitting...";
+      // Replace with your own Google Apps Script endpoint if needed
+      const url = "https://script.google.com/macros/s/AKfycbw2aTUTy7p4ZYzn1zevysK-WeJ5hdXudQkzmG7fw_6J0AiskvYVp8UujyNp7SEmbpMf/exec";
 
-      // Replace with your deployed Google Apps Script URL
-      const url = "https://script.google.com/macros/s/AKfycbzAbFdQy1D7TgxCHe98Dni2uDZ60TXpamEKIsk4VV1A-w5NEJhSVLSPhkwb-OptLB1a/exec";
+      const body = new URLSearchParams({ name, email, goal, referral });
 
-      // Use FormData instead of URLSearchParams for better compatibility
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('goal', goal);
-      formData.append('referral', referral);
+      // Show success immediately for better UX
+      msg.className = "success";
+      msg.textContent = "Thank you. You are on the list.";
+      form.reset();
 
+      // Send data in background
       try {
-        const response = await fetch(url, {
+        fetch(url, {
           method: "POST",
-          body: formData
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: body.toString()
         });
-
-        // Log for debugging
-        console.log('Response status:', response.status);
-        const text = await response.text();
-        console.log('Response text:', text);
-        
-        const result = JSON.parse(text);
-        
-        if (result.status === "success") {
-          msg.className = "success";
-          msg.textContent = "Thank you! You are on the list.";
-          form.reset();
-        } else {
-          throw new Error(result.message || "Submission failed");
-        }
       } catch (err) {
-        console.error("Submission error:", err);
-        msg.className = "error";
-        msg.textContent = "Something went wrong. Please try again or contact support.";
-      } finally {
-        submitBtn.disabled = false;
+        console.error(err);
       }
     });
   </script>
