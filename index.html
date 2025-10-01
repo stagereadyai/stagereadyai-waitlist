@@ -252,6 +252,10 @@
               <label for="goal">What is the biggest speaking challenge you would love to overcome? (optional)</label>
               <textarea id="goal" name="goal" placeholder="Example: I freeze during Q and A, I speak too fast, I avoid eye contact"></textarea>
             </div>
+            <div>
+              <label for="referral">Referral Email (optional)</label>
+              <input id="referral" name="referral" type="email" placeholder="friend@example.com" />
+            </div>
 
             <div class="cta">
               <button class="btn" type="submit">Get early access</button>
@@ -279,6 +283,7 @@
       const name  = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const goal  = document.getElementById("goal").value.trim();
+      const referral = document.getElementById("referral").value.trim();
 
       if (!name || !email) {
         msg.className = "error";
@@ -289,7 +294,7 @@
       // Replace with your own Google Apps Script endpoint if needed
       const url = "https://script.google.com/macros/s/AKfycbyYbdxQosgE5Fz8Ej6TgRY9B7xDNa8p1OWcxaSQHc_ZS9CBohc7LpYElMSIQJkkaUdF/exec";
 
-      const body = new URLSearchParams({ name, email, goal });
+      const body = new URLSearchParams({ name, email, goal, referral });
 
       // Show success immediately for better UX
       msg.className = "success";
