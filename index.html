@@ -189,6 +189,13 @@
       font-weight: 600;
     }
 
+    .timer {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff3d6;
+    }
+
     footer {
       margin-top: 18px;
       text-align: center;
@@ -203,7 +210,9 @@
       <header>
         <h1>Speak with confidence. Be heard. Be remembered.</h1>
         <p>Join the StageReady waitlist and start building real speaking confidence with simple practice that fits your life.</p>
-        <div class="deadline">Sign up before October 3rd to get lifetime access</div>
+        <div class="deadline">
+          Sign up before <span class="timer" id="timer">30:00</span> to get lifetime access
+        </div>
       </header>
 
       <section class="grid">
@@ -271,6 +280,27 @@
   </main>
 
   <script>
+    // Timer functionality
+    let timeRemaining = 30 * 60; // 30 minutes in seconds
+    const timerElement = document.getElementById("timer");
+
+    function updateTimer() {
+      const minutes = Math.floor(timeRemaining / 60);
+      const seconds = timeRemaining % 60;
+      timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      if (timeRemaining > 0) {
+        timeRemaining--;
+      } else {
+        clearInterval(timerInterval);
+        timerElement.textContent = "00:00";
+      }
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer(); // Initial call
+
+    // Form functionality
     const form = document.getElementById("waitlistForm");
     const msg  = document.getElementById("msg");
 
